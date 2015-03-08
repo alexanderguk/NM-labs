@@ -20,6 +20,9 @@ B = matrix([[-10.65],
             [ 15.45],
             [- 8.35]])
 
+Borig = B.copy()
+Aorig = A.copy()
+
 n = A.shape[0]
 
 # Part 1
@@ -66,8 +69,6 @@ for curN in range(n, 0, -1):
 print A    
 print B
 print "---"        
-print B[p[0]] / A[p[0], q[0]]
-print "---"        
 
 # Part 2
 for curN in range(n):
@@ -87,12 +88,16 @@ for curN in range(n):
         for j in range(n):
             if abs(A[i, j]) < 1e-6:
                 A[i, j] = 0
-            
-for i in range(n):
-    print "x" + str(p[i]) + "=" + str(B[p[i]] / A[p[i], q[i]])
     
 print A
+            
+x = zeros((n, 1))            
+for i in range(n):
+    print "x" + str(q[i]) + "=" + str(B[p[i]] / A[p[i], q[i]])
+    x[q[i]] = B[p[i]] / A[p[i], q[i]]
 
-print "NM course. First lab time"
+# Vector r calculation
 
+r = Borig - Aorig * x
 
+print r
