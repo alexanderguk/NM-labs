@@ -1,41 +1,35 @@
-# -*- coding: utf-8 -*-
+# Gaussian elimination algorithm
 
 from numpy import *
+import sys
 
-# Variant
-# Nvar = 5
-# k = Nvar - 5 = 0
-# a = 0.2k = 0
-# b = 0.2k = 0
+sys.stdout = open("output.txt", "w")
 
 # Input data
-
 A = matrix([[8.30, 2.62, 4.10, 1.90],
             [3.92, 8.45, 8.87, 2.46],
             [3.77, 7.21, 8.04, 2.28],
             [2.21, 3.65, 1.69, 6.99]])
-
 B = matrix([[-10.65],
             [ 12.21],
             [ 15.45],
             [- 8.35]])
+eps = 1e-6
 
-Borig = B.copy()
-Aorig = A.copy()
+print "---Input matrices---"
+print A
+print B
 
+# Gaussian elimination
+# Part 1: Forward elimination
 n = A.shape[0]
-
-# Part 1
-ATemp = zeros((n, n))
-BTemp = zeros((n, 1))
-    
 p = full(n, -1)
 q = full(n, -1)
-    
-print A    
+Borig = B.copy()
+Aorig = A.copy()
     
 for curN in range(n, 0, -1):
-    # Looking for main element a(main)
+    # Looking for the largest element of A (aMain)
     aMain = -float('inf')
     for i in range(n):
         if not i in p:
@@ -61,16 +55,14 @@ for curN in range(n, 0, -1):
 
     for i in range(n):
         for j in range(n):
-            if abs(A[i, j]) < 1e-6:
+            if abs(A[i, j]) < eps:
                 A[i, j] = 0
-
-    #print A    
     
+print "---Step 1 result---"
 print A    
-print B
-print "---"        
+print B  
 
-# Part 2
+# Part 2: Back substitution
 for curN in range(n):
     # Calculation m(i)
     m = zeros(n)
@@ -89,15 +81,21 @@ for curN in range(n):
             if abs(A[i, j]) < 1e-6:
                 A[i, j] = 0
     
+print "---Step 2 result---"
 print A
+print B
             
 x = zeros((n, 1))            
 for i in range(n):
-    print "x" + str(q[i]) + "=" + str(B[p[i]] / A[p[i], q[i]])
     x[q[i]] = B[p[i]] / A[p[i], q[i]]
 
-# Vector r calculation
+print "---X output---"
+print x
 
+# Residual vector calculation
 r = Borig - Aorig * x
-
+print "---Residual vector---"
 print r
+
+sys.stdout.close()
+sys.stdout = sys.__stdout__
